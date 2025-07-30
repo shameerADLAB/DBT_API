@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: stg_sales_last_sold
+    columns:
+      - name: STORE_ITEM_ID
+        tests:
+          - not_null

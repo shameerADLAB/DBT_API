@@ -1,0 +1,52 @@
+version: 2
+
+sources:
+  - name: workspace
+    database: ADLAB_DEV
+    schema: WORKSPACE
+
+    freshness:
+      warn_after: { count: 1, period: hour }
+      #error_after: { count: 2, period: day }
+
+    loaded_at_field: UPDATE_DTTM  # Use a TIMESTAMP column if available; otherwise, see note below
+
+    tables:
+      - name: VOID_HISTORICAL_LATESTFILE
+        description: >
+          Final void sales metrics table merged from recent reporting dates.
+
+        columns:
+          - name: STORE_ITEM_ID
+            description: Unique item-store identifier
+            tests:
+              - not_null
+
+          - name: AS_OF_DATE
+            description: Snapshot date for void calculation
+            tests:
+              - not_null
+
+          - name: '"1-WEEK-VOID"'
+            tests:
+              - accepted_values:
+                  values: [0, 1]
+                  quote: true
+
+          - name: '"2-WEEK-VOID"'
+            tests:
+              - accepted_values:
+                  values: [1]
+                  quote: true
+
+          - name: '"3-WEEK-VOID"'
+            tests:
+              - accepted_values:
+                  values: [1]
+                  quote: true
+
+          - name: '"4-WEEK-VOID"'
+            tests:
+              - accepted_values:
+                  values: [0, 1]
+                  quote: true
